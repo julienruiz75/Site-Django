@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Cowork Connect{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <header>
+        <h1 style="text-align: center;">Bienvenue sur Cowork Connect</h1>
+        <hr>
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- Contenu de la page -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <hr>
+        <p style="text-align:center;">© 2025 Cowork Connect</p>
+    </footer>
+
+</body>
+</html>
