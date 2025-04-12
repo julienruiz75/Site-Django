@@ -38,3 +38,10 @@ class ProfilUtilisateurForm(forms.ModelForm):
             'show_photo': 'Afficher la photo',
         }
 
+from django import forms
+from .models import ProfilUtilisateur
+
+class NiveauForm(forms.ModelForm):
+    class Meta:
+        model = ProfilUtilisateur
+        fields = ['niveau']

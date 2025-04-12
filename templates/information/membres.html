@@ -1,5 +1,7 @@
-{% extends "information/base.html" %}
+{% extends "base.html" %}
 {% load static %}
+
+{% block title %}Membres du Coworking{% endblock %}
 
 {% block content %}
 <h1>Liste des membres du coworking</h1>
@@ -30,9 +32,6 @@
             {% endif %}
             {% if profil.show_nom %}
                 <strong>Nom :</strong> {{ profil.nom|default:"-" }}<br>
-            {% endif %}
-            {% if profil.show_date_naissance %}
-                <strong>Date de naissance :</strong> {{ profil.date_naissance|date:"d F Y"|default:"-" }}<br>
             {% endif %}
             {% if profil.show_sexe %}
                 <strong>Sexe :</strong> {{ profil.get_sexe_display|default:"-" }}<br>
