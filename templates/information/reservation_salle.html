@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load dict_extras %}
+{% block content %}
+<div class="container" style="max-width: 1200px; margin: auto; font-family: Arial, sans-serif;">
+    <h2>🧑‍💻 Réserver une salle de travail</h2>
+    <p>Niveau actuel : <strong>{{ niveau|title }}</strong></p>
+    <p>Cliquez sur une case pour réserver ou annuler une réservation.</p>
+
+    {% for salle in salles_autorisees %}
+        <hr>
+        <h4>📍 Planning pour {{ salle.nom }} ({{ salle.get_type_display }})</h4>
+        <div style="overflow-x: auto; margin-top: 20px; margin-bottom: 50px;">
+            <table style="width: 100%; min-width: 700px; border-collapse: collapse; font-size: 14px;">
+                <thead>
+                    <tr style="background-color: #003366; color: white;">
+                        <th style="padding: 10px;">Heure</th>
+                        {% for jour in jours %}
+                            <th style="padding: 10px;">{{ jour }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in heures %}
+                        <tr>
+                            <td style="padding: 8px; background-color: #f0f0f0; font-weight: bold;">{{ h }}</td>
+                            {% for jour in jours %}
+                                {% with date=dates|dict_get:jour %}
+                                    {% if date %}
+                                        {% with date_str=date|date:"Y-m-d" %}
+                                            {% with key=salle.id|stringformat:"s"|add:"_"|add:date_str|add:"_"|add:h %}
+                                                {% with resa=reservations_dict|dict_get:key %}
+                                                    {% if resa %}
+                                                        {% if resa.utilisateur.username == user.username %}
+                                                            <td style="background-color: #d4edda; text-align: center;">
+                                                                <a href="{% url 'annuler_creneau' resa.id %}" style="color: green; text-decoration: none;">Vous</a>
+                                                            </td>
+                                                        {% else %}
+                                                            <td style="background-color: #f8d7da; text-align: center;">
+                                                                <span style="color: #a94442;">Réservé</span>
+                                                            </td>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <td style="background-color: #f2f2f2; text-align: center;">
+                                                            <a href="{% url 'reserver_creneau_direct' salle.id date_str h %}" style="color: #666;">Libre</a>
+                                                        </td>
+                                                    {% endif %}
+                                                {% endwith %}
+                                            {% endwith %}
+                                        {% endwith %}
+                                    {% else %}
+                                        <td style="background-color: #ccc; text-align: center;">Erreur</td>
+                                    {% endif %}
+                                {% endwith %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
+
+    <a href="{% url 'reservation_choix' %}" style="display: inline-block; margin-top: 40px;">← Retour</a>
+</div>
+{% endblock %}

@@ -1,17 +1,23 @@
 from django.contrib import admin
-from .models import Evenement  # on importe le modèle
+from .models import Evenement, ProfilUtilisateur, ObjetConnecte
 
+# 🎟️ Admin Événements
 @admin.register(Evenement)
 class EvenementAdmin(admin.ModelAdmin):
-    list_display = ('titre', 'domaine', 'date')  # colonnes visibles dans l'admin
-    list_filter = ('domaine', 'date')  # filtres dans la sidebar
-    search_fields = ('titre', 'description')  # champ de recherche rapide
+    list_display = ('titre', 'domaine', 'date')
+    list_filter = ('domaine', 'date')
+    search_fields = ('titre', 'description')
 
-from django.contrib import admin
-from .models import ProfilUtilisateur
-
+# 👤 Admin Profils utilisateurs
 @admin.register(ProfilUtilisateur)
 class ProfilAdmin(admin.ModelAdmin):
-    list_display = ('user', 'prenom', 'nom', 'societe', 'poste', 'niveau')
+    list_display = ('user', 'prenom', 'nom', 'societe', 'poste', 'niveau', 'points')  # ✅ ajout points
+    list_editable = ('niveau', 'points')  # ✅ modifiables directement dans la liste
     search_fields = ('user__username', 'prenom', 'nom', 'societe')
     list_filter = ('niveau',)
+
+# 🧠 Admin Objets connectés
+@admin.register(ObjetConnecte)
+class ObjetConnecteAdmin(admin.ModelAdmin):
+    list_display = ('nom', 'type', 'salle_associee', 'statut', 'niveau_requis', 'date_ajout')
+    list_filter = ('type', 'statut', 'niveau_requis', 'salle_associee')

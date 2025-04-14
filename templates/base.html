@@ -98,3 +98,101 @@
 
 </body>
 </html>
+
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        text-align: left;
+    }
+
+    thead {
+        background-color: #003366;
+        color: white;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    button {
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .statut-actif {
+        color: green;
+        font-weight: bold;
+    }
+
+    .statut-inactif {
+        color: red;
+        font-weight: bold;
+    }
+
+    .statut-maintenance {
+        color: orange;
+        font-weight: bold;
+    }
+
+    .statut-verrouille {
+        color: grey;
+        font-weight: bold;
+    }
+
+    .cadenas {
+        margin-left: 5px;
+    }
+</style>
+
+<style>
+    .calendar-container {
+        overflow-x: auto;
+        margin-top: 20px;
+    }
+
+    .calendar-table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 700px;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    }
+
+    .calendar-table th, .calendar-table td {
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+
+    .calendar-table th {
+        background-color: #003366;
+        color: white;
+    }
+
+    .calendar-table td.disponible {
+        background-color: #e6f7ff;
+        cursor: pointer;
+    }
+
+    .calendar-table td.reserve {
+        background-color: #ffdddd;
+        color: #888;
+    }
+</style>
+
+
+{% if user.is_authenticated %}
+    <a href="{% url 'reservation_choix' %}">Réservation</a>
+{% endif %}
+

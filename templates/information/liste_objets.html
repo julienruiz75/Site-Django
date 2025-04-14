@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    table.objets-connectes {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 30px;
+        background-color: #fff;
+        font-family: Arial, sans-serif;
+    }
+
+    table.objets-connectes th {
+        background-color: #f2f2f2;
+        color: #333;
+        font-weight: bold;
+        padding: 12px;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+
+    table.objets-connectes td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .statut-actif {
+        color: green;
+        font-weight: bold;
+    }
+
+    .statut-inactif {
+        color: red;
+        font-weight: bold;
+    }
+
+    .statut-maintenance {
+        color: orange;
+        font-weight: bold;
+    }
+
+    .statut-lock {
+        color: grey;
+        font-weight: bold;
+    }
+
+    button.statut-btn {
+        border: none;
+        background: none;
+        cursor: pointer;
+    }
+
+    form.form-filtres {
+        margin-bottom: 20px;
+    }
+
+    form.form-filtres select,
+    form.form-filtres button {
+        margin-right: 10px;
+        padding: 5px;
+    }
+</style>
+
+<div class="container">
+    <h2 class="text-center">Objets connectés disponibles</h2>
+    <p>Bonjour {{ pseudo }}, vous êtes de niveau <strong>{{ niveau|title }}</strong>.</p>
+
+    <!-- Filtres -->
+    <form method="get" class="form-filtres">
+        <label for="type">Type :</label>
+        <select name="type" id="type">
+            <option value="tous">Tous les types</option>
+            {% for code, label in tous_types %}
+                <option value="{{ code }}" {% if code == type_selectionne %}selected{% endif %}>
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="salle">Salle :</label>
+        <select name="salle" id="salle">
+            <option value="tous">Toutes les salles</option>
+            {% for salle in toutes_salles %}
+                <option value="{{ salle.id }}" {% if salle.id|stringformat:"s" == salle_selectionnee %}selected{% endif %}>
+                    {{ salle.nom }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Appliquer</button>
+    </form>
+
+    {% if objets %}
+        <table class="objets-connectes">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Salle</th>
+                    <th>Statut</th>
+                    <th>Niveau requis</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for objet in objets %}
+                    <tr>
+                        <td>{{ objet.nom }}</td>
+                        <td>{{ objet.get_type_display }}</td>
+                        <td>{{ objet.description|default:"Aucune description" }}</td>
+                        <td>{{ objet.salle_associee }}</td>
+                        <td>
+                            {% if objet.niveau_requis in niveaux_autorises %}
+                                <form method="post" action="{% url 'changer_statut_objet' objet.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="statut-btn">
+                                        <span class="
+                                            {% if objet.statut == 'actif' %}statut-actif
+                                            {% elif objet.statut == 'inactif' %}statut-inactif
+                                            {% else %}statut-maintenance{% endif %}">
+                                            {{ objet.get_statut_display }}
+                                        </span>
+                                    </button>
+                                </form>
+                            {% else %}
+                                <span class="statut-lock">
+                                    {{ objet.get_statut_display }} 🔒
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>{{ objet.get_niveau_requis_display }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucun objet ne correspond aux filtres sélectionnés.</p>
+    {% endif %}
+</div>
+{% endblock %}

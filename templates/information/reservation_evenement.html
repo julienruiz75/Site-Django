@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container" style="max-width: 900px; margin: auto; padding: 30px; font-family: Arial, sans-serif;">
+    <h2>📅 Réserver un événement</h2>
+    {% if message %}
+        <p style="color: green; font-weight: bold;">{{ message }}</p>
+    {% endif %}
+
+    {% for event in evenements %}
+        <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+            <h3>{{ event.nom }}</h3>
+            <p><strong>Date :</strong> {{ event.date|date:"d/m/Y" }} à {{ event.heure|time:"H:i" }}</p>
+            <p><strong>Lieu :</strong> {{ event.lieu }}</p>
+            <p><strong>Domaine :</strong> {{ event.domaine }}</p>
+            <p><strong>Description :</strong> {{ event.description }}</p>
+
+            {% if user in event.participants.all %}
+                <p style="color: green;">✅ Déjà inscrit</p>
+            {% else %}
+                <form method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="event_id" value="{{ event.id }}">
+                    <button type="submit" style="padding: 8px 12px;">S'inscrire</button>
+                </form>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <a href="{% url 'reservation_choix' %}">← Retour</a>
+</div>
+{% endblock %}

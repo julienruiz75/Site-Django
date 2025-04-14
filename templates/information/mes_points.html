@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .container {
+        background: #f9f9f9;
+        padding: 30px;
+        border-radius: 8px;
+        max-width: 700px;
+        margin: auto;
+        font-family: Arial, sans-serif;
+    }
+
+    h2, h3, h4 {
+        color: #003366;
+        margin-top: 20px;
+    }
+
+    ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    ul li::before {
+        content: "✔️ ";
+        margin-right: 5px;
+    }
+
+    form {
+        margin-top: 20px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 8px;
+        margin: 6px 0 12px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    button {
+        background-color: #003366;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0055aa;
+    }
+
+    .info-box {
+        background-color: #e6f2ff;
+        padding: 10px;
+        border-left: 5px solid #3399ff;
+        margin-top: 15px;
+    }
+
+    .success {
+        color: green;
+        font-weight: bold;
+    }
+
+    .error {
+        color: red;
+        font-weight: bold;
+    }
+
+    a {
+        text-decoration: none;
+        color: #003366;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container">
+    <h2>🎯 Mon solde de points</h2>
+
+    <div class="info-box">
+        <p>Vous avez actuellement <strong>{{ points }}</strong> point{% if points != 1 %}s{% endif %}.</p>
+        <p>Niveau actuel : <strong>{{ niveau|title }}</strong></p>
+
+        {% if prochain_palier %}
+            <p>Prochain niveau : <strong>{{ prochain_palier.0 }}</strong> à <strong>{{ prochain_palier.1 }}</strong> points</p>
+        {% else %}
+            <p>🥳 Vous avez atteint le niveau maximal (Expert) !</p>
+        {% endif %}
+    </div>
+
+    <h3>🎁 Donner des points à un membre</h3>
+
+    {% if message_don %}
+        <p class="{% if '✅' in message_don %}success{% else %}error{% endif %}">{{ message_don }}</p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="id_pseudo">Pseudo du destinataire :</label>
+        {{ form.pseudo }}
+
+        <label for="id_points">Nombre de points à donner :</label>
+        {{ form.points }}
+
+        <button type="submit">Envoyer</button>
+    </form>
+
+    <h4>📈 Comment gagner des points ?</h4>
+    <ul>
+        <li>Connexion à la plateforme : +1 point</li>
+        <li>Badger une salle réservée : +1 point</li>
+        <li>Participer à un événement : +10 point</li>
+    </ul>
+
+    <h4>🏆 Niveaux</h4>
+    <ul>
+        <li><strong>Débutant</strong> : 0 points</li>
+        <li><strong>Intermédiaire</strong> : 15 points (vous recevez des cadeaux 🎁)</li>
+        <li><strong>Avancé</strong> : 50 points</li>
+        <li><strong>Expert</strong> : 100 points</li>
+    </ul>
+
+    <a href="{% url 'home' %}">← Retour à l'accueil</a>
+</div>
+{% endblock %}

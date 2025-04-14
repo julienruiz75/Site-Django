@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .reservation-container {
+        max-width: 700px;
+        margin: 100px auto;
+        text-align: center;
+    }
+
+    .reservation-container h2 {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    .reservation-container p {
+        font-size: 18px;
+        margin-bottom: 30px;
+    }
+
+    .btn-reservation {
+        display: inline-block;
+        margin: 15px;
+        padding: 15px 30px;
+        font-size: 18px;
+        font-weight: bold;
+        text-decoration: none;
+        border-radius: 10px;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-evenement {
+        background-color: #007bff;
+    }
+
+    .btn-evenement:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-salle {
+        background-color: #28a745;
+    }
+
+    .btn-salle:hover {
+        background-color: #1e7e34;
+    }
+
+    .btn-retour {
+        display: block;
+        margin-top: 40px;
+        color: #003366;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .btn-retour:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="reservation-container">
+    <h2>📅 Réserver un espace</h2>
+    <p>Choisissez le type de réservation que vous souhaitez effectuer :</p>
+
+    <a href="{% url 'reservation_evenement' %}" class="btn-reservation btn-evenement">
+        🎤 Réserver un événement
+    </a>
+
+    <a href="{% url 'reservation_salle' %}" class="btn-reservation btn-salle">
+        🧑‍💻 Réserver une salle de travail
+    </a>
+
+    <a href="{% url 'home' %}" class="btn-retour">← Retour à l'accueil</a>
+</div>
+{% endblock %}
+

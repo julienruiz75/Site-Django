@@ -33,10 +33,15 @@
 
     {% if user.is_authenticated %}
         <p>Bienvenue <strong>{{ user.username }}</strong> 👋</p>
+
         <a class="btn" href="{% url 'logout' %}">Se déconnecter</a>
         <a class="btn" href="{% url 'profil' %}">Mon profil</a>
         <a class="btn" href="{% url 'decouvrir' %}">Découvrir</a>
         <a class="btn" href="{% url 'membres' %}">Membres</a>
+        <a class="btn" href="{% url 'mes_points' %}">Mes points</a>
+        <a class="btn" href="{% url 'liste_objets' %}">Nos objets connectés</a>
+        <a class="btn" href="{% url 'reservation_choix' %}"> Réserver</a>
+
     {% else %}
         <a class="btn" href="{% url 'inscription' %}">S'inscrire</a>
         <a class="btn" href="{% url 'connexion' %}">Se connecter</a>
